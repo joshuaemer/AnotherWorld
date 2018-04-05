@@ -31,7 +31,9 @@ public class gameController : Photon.MonoBehaviour{
     public Text worldName;
     private IDictionary<int, int> keymap;
     public int env;
-    
+    public GameObject Inventory;
+    public bool CheckInventory = false;
+
     void Start()
     {
 		PhotonView photonView = GetComponent<PhotonView>();
@@ -57,20 +59,51 @@ public class gameController : Photon.MonoBehaviour{
 				Cursor.visible = true;
 			}
 			if (Input.GetKeyDown (KeyCode.Escape) && !processObj && !interact) {
-				MenuState = !MenuState;
-				Menu.SetActive (MenuState);
-				CameraDisable = !CameraDisable;
-				MouseVisiable = !MouseVisiable;
-				ui = !ui;
-				if (ui) {
-					inhand.SetActive (false);
-	             
-				} else {
-					inhand.SetActive (true);
-				}
 
+                if (CheckInventory)
+                {
+                    CheckInventory = !CheckInventory;
+                    Inventory.SetActive(CheckInventory);
+                    ui_off(Inventory);
+                    menu_off();
+                }
+                else
+                {
+                    MenuState = !MenuState;
+                    Menu.SetActive(MenuState);
+                    CameraDisable = !CameraDisable;
+                    MouseVisiable = !MouseVisiable;
+                    ui = !ui;
+                    if (ui)
+                    {
+                        inhand.SetActive(false);
+
+                    }
+                    else
+                    {
+                        inhand.SetActive(true);
+                    }
+                }
+                
 			}
-			if (processObj) {
+            if (Input.GetKeyDown(KeyCode.I) && !processObj && !interact && !MenuState)
+            {
+                    CheckInventory = !CheckInventory;
+                    Inventory.SetActive(CheckInventory);
+                    CameraDisable = !CameraDisable;
+                    MouseVisiable = !MouseVisiable;
+                    ui = !ui;
+                    if (ui)
+                    {
+                        inhand.SetActive(false);
+                    }
+                    else
+                    {
+                        inhand.SetActive(true);
+                    }
+            }
+            
+        if (processObj) {
 				if (Input.GetKeyDown (KeyCode.Q)) {
 					keymap [(int)KeyCode.Q] = 1;
 				}
@@ -223,6 +256,7 @@ public class gameController : Photon.MonoBehaviour{
     {
 
         MenuState = false;
+        CheckInventory = false;
     }
     public void loadScene(int idx)
     {
