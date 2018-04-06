@@ -13,7 +13,8 @@ public class Player : MonoBehaviour {
     private gameController _controller;
     private static bool created = false;
     private GameObject _player;
-
+    public Object[] loadedAssets;
+    public int chosen;
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -25,7 +26,10 @@ public class Player : MonoBehaviour {
             Destroy(this.gameObject);
         }
     }
-
+    public void modelSelected(int selection)
+    {
+        chosen = selection;
+    }
     void loadPlayer()
 	{
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -54,11 +58,10 @@ public class Player : MonoBehaviour {
 				Debug.Log("********* LOADING ASSETS ");
 
 				AssetBundle bundle = www.assetBundle;
-//				string[] assetList = bundle.GetAllAssetNames();
-
-				Object[] assets = bundle.LoadAllAssets();
-			
-		
+                //				string[] assetList = bundle.GetAllAssetNames();
+                Object[] assets = bundle.LoadAllAssets();
+                //assets = bundle.LoadAllAssets();
+                loadedAssets = assets;
 				foreach (Object asset in assets) {
 					Debug.Log ("******** " + asset.name);
 					Instantiate (asset, transform.position, transform.rotation);
@@ -67,9 +70,26 @@ public class Player : MonoBehaviour {
 				itemct++;
 			}
 		}
-		yield return www;
+        Debug.Log("current asset bundle " + www.assetBundle);
+        if (www.assetBundle != null)
+        {
+            AssetBundle bundle = www.assetBundle;
+            Object[] assets = bundle.LoadAllAssets();
+            loadedAssets = assets;
+            foreach (Object asset in assets)
+            {
+                Debug.Log("******** " + asset.name);
+                //Instantiate(asset, transform.position, transform.rotation);
+            }
+        }
+        Debug.Log("loaded assets " + loadedAssets.Length);
+        yield return www;
 	}
-
+    public void loadfromInventory(int assetNum)
+    {
+        Instantiate(loadedAssets[assetNum], transform.position, transform.rotation);
+        Debug.Log("Item placed: " + loadedAssets[assetNum]);
+    }
 
 	// Use this for initialization
 	void Start () {
