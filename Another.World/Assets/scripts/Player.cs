@@ -14,7 +14,7 @@ public class Player : MonoBehaviour {
     private static bool created = false;
     private GameObject _player;
     public Object[] loadedAssets;
-    public int chosen;
+    public int chosen = 0;
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
@@ -35,9 +35,16 @@ public class Player : MonoBehaviour {
         GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Cube);
         Mesh mesh = sphere.GetComponent<MeshFilter>().sharedMesh;
         Material material = sphere.GetComponent<MeshRenderer>().sharedMaterial;
-        inhand.GetComponent<MeshFilter>().mesh = mesh;
-        inhand.GetComponent<Renderer>().material = material;
-        inhand.transform.position = this.transform.forward * 5+this.transform.position;
+        //  if(chosen == 0)
+        // {
+
+        //        }
+        //      else if(chosen == 1)
+        //    {
+
+        //  }
+        //   inhand.GetComponent<MeshFilter>().mesh = mesh;
+        //    inhand.GetComponent<Renderer>().material = material;
         GameObject.Destroy(sphere);
     }
     
@@ -87,8 +94,18 @@ public class Player : MonoBehaviour {
 	}
     public void loadfromInventory(int assetNum)
     {
-        Instantiate(loadedAssets[assetNum], transform.position, transform.rotation);
-        Debug.Log("Item placed: " + loadedAssets[assetNum]);
+        GameObject temp = (GameObject)loadedAssets[assetNum]; 
+        Instantiate(loadedAssets[assetNum], transform.position+ new Vector3(0,0,5), transform.rotation,inhand.transform);
+        //inhand = (GameObject)loadedAssets[assetNum];
+        Debug.Log(inhand);
+        /*  Mesh mesh = temp.GetComponent<MeshFilter>().sharedMesh;
+          Material material = temp.GetComponent<MeshRenderer>().sharedMaterial;
+          inhand = (GameObject)loadedAssets[assetNum];
+          inhand.GetComponent<MeshFilter>().mesh = mesh;
+          inhand.GetComponent<Renderer>().material = material;
+          inhand.transform.position = this.transform.forward * 5 + this.transform.position;
+          Debug.Log("Item placed: " + loadedAssets[assetNum]);
+          Destroy(temp);*/
     }
 
 	// Use this for initialization
